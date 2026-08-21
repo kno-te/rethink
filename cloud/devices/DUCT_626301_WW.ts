@@ -667,7 +667,7 @@ export default class Device extends TLVDevice {
             })
         }
 
-        if (this.hasCapOrTag(0x23f)) {
+        if (this.hasTag(0x23f)) {
             // DUCT capture: unsolicited 0x23f 1↔0 when toggled in ThinQ; same write path as other config switches.
             // Can be enabled only when running in the cooling mode
             this.addModeDependentConfigSwitchField(
