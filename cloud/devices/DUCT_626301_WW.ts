@@ -19,7 +19,6 @@ export default class Device extends TLVDevice {
     modePrev?: string
     airClean: boolean = false
     jetMode: boolean = false
-    energySave: boolean = false
     comfortCool: boolean = false
     tlvBlacklistDisableTimer: ReturnType<typeof setTimeout> | undefined
     increasedQueryIntervalTimeout: ReturnType<typeof setTimeout> | undefined
@@ -607,7 +606,7 @@ export default class Device extends TLVDevice {
                 0x20f,
                 'airclean',
                 /* Same desc as in lg_thinq */
-                'Air purify',
+                'Air Purify',
                 'mdi:air-purifier',
                 'airClean',
             )
@@ -631,22 +630,9 @@ export default class Device extends TLVDevice {
             this.addTimerField(config, 0x21b, 'stoptimer', 'Turn-off timer', 'mdi:timer-stop', 24)
         }
 
-        if (this.hasCapOrTag(0x2cc, 2, 0x20d)) {
-            // Can be enabled only when running in the cooling mode
-            this.addModeDependentConfigSwitchField(
-                config,
-                0x20d,
-                'energysave',
-                'Energy saving',
-                'mdi:flower',
-                'energySave',
-                (mode) => mode === 0,
-            )
-        }
-
         if (this.hasCapOrTag(0x2cc, 4, 0x20e)) {
             // CST capture: unsolicited 0x20e 1↔0 when toggled in ThinQ; same write path as other config switches.
-            this.addConfigSwitchField(config, 0x20e, 'autodry', 'Auto dry', 'mdi:hair-dryer')
+            this.addConfigSwitchField(config, 0x20e, 'autodry', 'Auto Dry', 'mdi:hair-dryer')
 
             const compADryRem = {
                 platform: 'sensor',
@@ -674,8 +660,8 @@ export default class Device extends TLVDevice {
                 config,
                 0x23f,
                 'comfortcool',
-                'Comfort cooling',
-                'mdi:weather-windy',
+                'Comfort Cooling',
+                'mdi:leaf',
                 'comfortCool',
                 (mode) => mode === 0,
             )
@@ -1008,7 +994,7 @@ export default class Device extends TLVDevice {
         name: string,
         desc: string,
         icon: string,
-        field_name: 'airClean' | 'jetMode' | 'energySave' | 'comfortCool',
+        field_name: 'airClean' | 'jetMode' | 'comfortCool',
         check_mode?: CheckMode,
     ) {
         const comp = {
