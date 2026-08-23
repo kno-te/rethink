@@ -435,7 +435,7 @@ export default class Device extends TLVDevice {
             write_attach: [0x1f9, 0x1fa],
         })
 
-        if (this.hasCapOrTag(0x2cd, 4, 0x321)) {
+        if (this.raw_clip_state[0x2cd] & 4) {
             config['components']['climate']['swing_modes'] = ['1', '2', '3', '4', '5', '6', 'on', 'off']
             this.addField(config, {
                 id: 0x321,
@@ -462,7 +462,7 @@ export default class Device extends TLVDevice {
             })
         }
 
-        if (this.hasCapOrTag(0x2cd, 8, 0x322)) {
+        if (this.raw_clip_state[0x2cd] & 8) {
             config['components']['climate']['swing_horizontal_modes'] = [
                 '1',
                 '2',
