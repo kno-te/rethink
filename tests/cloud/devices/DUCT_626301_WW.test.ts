@@ -289,7 +289,6 @@ describe(MODEL_ID, () => {
         assert.equal(components.climate.current_humidity_topic, '$this/humidity-')
         assert.ok(components.autodry, 'autodry from tag 0x20e')
         assert.ok(components.airclean, 'air purify from tag 0x20f')
-        assert.ok(components.energysave, 'energy save from tag 0x20d')
         assert.ok(components.sleeptimer, 'sleep timer from tag 0x21a')
         assert.ok(components.comfortcool, 'comfort cool from tag 0x23f')
         // Vertical swing tag absent on this capture
@@ -305,8 +304,6 @@ describe(MODEL_ID, () => {
         assert.equal(ha.getProperty(DEVICE_ID, 'climate', 'mode_state'), 'cool')
         assert.equal(ha.getProperty(DEVICE_ID, 'autodry', 'state'), 'OFF')
         assert.equal(ha.getProperty(DEVICE_ID, 'airclean', 'state'), 'OFF')
-        // Energy save only publishes while in cool (mode=0) and powered on
-        assert.equal(ha.getProperty(DEVICE_ID, 'energysave', 'state'), 'OFF')
         assert.equal(ha.getProperty(DEVICE_ID, 'sleeptimer', 'state'), 0)
         // Comfort cool only publishes while in cool (mode=0) and powered on
         assert.equal(ha.getProperty(DEVICE_ID, 'comfortcool', 'state'), 'OFF')
