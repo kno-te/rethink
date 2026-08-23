@@ -289,13 +289,14 @@ export default class Device extends TLVDevice {
                     action_topic: '$this/climate-action',
                     temperature_unit: 'C',
                     /* TODO: detect 0.5 C vs 1 C step */
-                    temp_step: 0.5,
-                    precision: 0.5,
+                    temp_step: 1,
+                    precision: 1,
+                    /* temp_step and precision set from 0.5 to 1 to accommodate home assistant autoconversion from C to F temp unit. If this model is sold in civilized areas where C is used, may need to do something more fancy */
                     /* TODO: some devices report these temp ranges via tags 0x2e1 - 0x2ec */
-                    min_temp: 18,
+                    min_temp: 16,
                     max_temp: 30,
                     /* TODO: get from 0x2c2 */
-                    fan_modes: ['auto', 'very low', 'low', 'medium', 'high', 'very high'],
+                    fan_modes: ['auto', 'low', 'medium', 'high'],
                     /* TODO: get allowed op modes from 0x2c1 */
                 } satisfies ClimateComponent,
             },
@@ -403,11 +404,11 @@ export default class Device extends TLVDevice {
                 const modes2ha = [
                     undefined,
                     undefined,
-                    'very low',
                     'low',
+                    undefined,
                     'medium',
+                    undefined,
                     'high',
-                    'very high',
                     undefined,
                     'auto',
                 ]
@@ -415,11 +416,9 @@ export default class Device extends TLVDevice {
             },
             write_xform: (val) => {
                 const modes2clip: Record<string, number> = {
-                    'very low': 2,
-                    low: 3,
+                    low: 2,
                     medium: 4,
-                    high: 5,
-                    'very high': 6,
+                    high: 6,
                     auto: 8,
                 }
                 return modes2clip[val]
