@@ -17,7 +17,6 @@ export default class Device extends TLVDevice {
     powerStatePrev?: boolean
     modeChangeHooks: PowerModeChangeHook[] = []
     modePrev?: string
-    airClean: boolean = false
     jetMode: boolean = false
     comfortCool: boolean = false
     tlvBlacklistDisableTimer: ReturnType<typeof setTimeout> | undefined
@@ -599,16 +598,6 @@ export default class Device extends TLVDevice {
             (raw) => raw * 10,
         )
 
-        if (this.hasCapOrTag(0x2cc, 1, 0x20f)) {
-            this.addModeDependentConfigSwitchField(
-                config,
-                0x20f,
-                'airclean',
-                /* Same desc as in lg_thinq */
-                'Air Purify',
-                'mdi:air-purifier',
-                'airClean',
-            )
         }
 
         // Jet: caps bits prefer cool/heat separately; if only the state tag is present, offer both.
@@ -993,7 +982,7 @@ export default class Device extends TLVDevice {
         name: string,
         desc: string,
         icon: string,
-        field_name: 'airClean' | 'jetMode' | 'comfortCool',
+        field_name: 'jetMode' | 'comfortCool',
         check_mode?: CheckMode,
     ) {
         const comp = {
