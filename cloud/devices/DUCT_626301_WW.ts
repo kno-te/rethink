@@ -598,26 +598,6 @@ export default class Device extends TLVDevice {
             (raw) => raw * 10,
         )
 
-        }
-
-        // Jet: caps bits prefer cool/heat separately; if only the state tag is present, offer both.
-        const jetBits = (this.raw_clip_state[0x2cd] ?? 0) & 3
-        const jetCool: boolean = !!(jetBits & 1) || (this.hasTag(0x323) && jetBits === 0)
-        const jetHeat: boolean = !!(jetBits & 2) || (this.hasTag(0x323) && jetBits === 0)
-        if (jetCool || jetHeat) {
-            this.addJetField(config, 0x323, 'jet', 'Jet', 'mdi:wind-power', jetCool, jetHeat)
-        }
-
-        if (this.hasCapOrTag(0x2d3, 1, 0x21a)) {
-            // 15h - displayed in hex as "FH"
-            this.addTimerField(config, 0x21a, 'sleeptimer', 'Sleep timer', 'mdi:bed-clock', 15)
-        }
-
-        if (this.hasCapOrTag(0x2d3, 4, 0x21c) || this.hasTag(0x21b)) {
-            this.addTimerField(config, 0x21c, 'starttimer', 'Turn-on timer', 'mdi:timer-play', 24)
-            this.addTimerField(config, 0x21b, 'stoptimer', 'Turn-off timer', 'mdi:timer-stop', 24)
-        }
-
         if (this.hasCapOrTag(0x2cc, 4, 0x20e)) {
             // CST capture: unsolicited 0x20e 1↔0 when toggled in ThinQ; same write path as other config switches.
             this.addConfigSwitchField(config, 0x20e, 'autodry', 'Auto Dry', 'mdi:hair-dryer')
