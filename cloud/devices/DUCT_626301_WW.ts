@@ -288,14 +288,14 @@ export default class Device extends TLVDevice {
                     action_topic: '$this/climate-action',
                     temperature_unit: 'C',
                     /* TODO: detect 0.5 C vs 1 C step */
-                    temp_step: 1,
-                    precision: 1,
+                    temp_step: 0.5,
+                    precision: 0.1,
                     /* temp_step and precision set from 0.5 to 1 to accommodate home assistant autoconversion from C to F temp unit. If this model is sold in civilized areas where C is used, may need to do something more fancy */
                     /* TODO: some devices report these temp ranges via tags 0x2e1 - 0x2ec */
                     min_temp: 16,
                     max_temp: 30,
                     /* TODO: get from 0x2c2 */
-                    fan_modes: ['auto', 'low', 'medium', 'high'],
+                    fan_modes: ['low', 'medium', 'high'],
                     /* TODO: get allowed op modes from 0x2c1 */
                 } satisfies ClimateComponent,
             },
@@ -501,7 +501,6 @@ export default class Device extends TLVDevice {
             })
         }
 
-        this.addOptionalSensorField(config, 0x221, 'error', 'Error code', 'mdi:alert')
         this.addOptionalSensorField(
             config,
             0x32e,
@@ -601,24 +600,6 @@ export default class Device extends TLVDevice {
         if (this.hasCapOrTag(0x2cc, 4, 0x20e)) {
             // CST capture: unsolicited 0x20e 1↔0 when toggled in ThinQ; same write path as other config switches.
             this.addConfigSwitchField(config, 0x20e, 'autodry', 'Auto Dry', 'mdi:hair-dryer')
-
-            const compADryRem = {
-                platform: 'sensor',
-                unique_id: '$deviceid-autodryremain',
-                name: 'Auto dry remaining',
-                icon: 'mdi:hair-dryer-outline',
-                unit_of_measurement: '%',
-                suggested_display_precision: 0,
-                entity_category: 'diagnostic',
-            }
-            config['components']['autodryremain'] = compADryRem
-
-            this.addField(config, {
-                id: 0x225,
-                name: '',
-                comp: 'autodryremain',
-                writable: false,
-            })
         }
 
         if (this.raw_clip_state[0x2cb] & 12) {
