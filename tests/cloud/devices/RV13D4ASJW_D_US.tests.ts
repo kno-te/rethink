@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
-import DUT from '@/cloud/devices/RV13B6BSD_D_US_WIFI'
+import DUT from '@/cloud/devices/RV13D4ASJW_D_US_WIFI'
 import type { Metadata } from '@/cloud/thinq'
 import { MockHAConnection, MockThinq2Device, buf } from '@/tests/helpers/mocks'
 
